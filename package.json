@@ -1,0 +1,14 @@
+{
+  "name": "wonder-plugins",
+  "version": "0.1.0",
+  "description": "Wonder agent plugins for Cursor, Claude Code, and Codex.",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "validate": "node ./scripts/validate.mjs"
+  },
+  "devDependencies": {
+    "ajv": "^8.18.0",
+    "ajv-formats": "^3.0.1"
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "name": "wonder",
+  "owner": {
+    "name": "Wonder",
+    "email": "team@wonder.so"
+  },
+  "metadata": {
+    "description": "Wonder connects your designs, agents, code, and data on a single AI-native canvas.",
+    "version": "0.1.0"
+  },
+  "plugins": [
+    {
+      "name": "wonder",
+      "source": "./plugins/wonder",
+      "description": "Connect to the Wonder MCP server and design on a canvas Claude can read and write to."
+    }
+  ]
+}

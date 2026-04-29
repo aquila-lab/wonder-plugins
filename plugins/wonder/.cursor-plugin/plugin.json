@@ -1,0 +1,25 @@
+{
+  "name": "wonder",
+  "displayName": "Wonder",
+  "version": "0.1.0",
+  "description": "Design on a canvas that Cursor can read and write to. Generate UI from your code, sync designs and components, and ship faster.",
+  "author": {
+    "name": "Wonder",
+    "email": "team@wonder.so"
+  },
+  "homepage": "https://wonder.so",
+  "repository": "https://github.com/aquila-lab/wonder-plugins",
+  "license": "MIT",
+  "keywords": [
+    "wonder",
+    "design",
+    "ui",
+    "canvas",
+    "design-to-code",
+    "code-to-design",
+    "design-system",
+    "mcp"
+  ],
+  "logo": "./assets/logo.svg",
+  "mcpServers": "./mcp.json"
+}

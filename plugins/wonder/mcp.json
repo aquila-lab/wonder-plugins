@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "wonder": {
+      "type": "http",
+      "url": "https://mcp.wonder.so/mcp"
+    }
+  }
+}
