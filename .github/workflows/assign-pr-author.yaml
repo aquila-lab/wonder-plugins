@@ -5,7 +5,7 @@ name: assign-pr-author
 # https://github.com/aquila-lab/.github/blob/master/.github/workflows/assign-pr-author.yml
 # and the sync bot will open a PR here.
 #
-# Status check contract: produces context `assign-pr-author / assign-author`,
+# Status check contract: produces context `assign-author / assign-author`,
 # referenced in aquila-lab/.github/rulesets/{internal,public}-default.json.
 # Do not rename the workflow `name:` or the calling job id without updating
 # the rulesets in lock-step.
