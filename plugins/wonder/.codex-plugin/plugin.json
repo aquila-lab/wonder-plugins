@@ -5,9 +5,9 @@
   "author": {
     "name": "Wonder",
     "email": "team@wonder.so",
-    "url": "https://wonder.so"
+    "url": "https://wonder.design"
   },
-  "homepage": "https://wonder.so",
+  "homepage": "https://wonder.design",
   "repository": "https://github.com/aquila-lab/wonder-plugins.git",
   "license": "MIT",
   "keywords": [
@@ -28,8 +28,9 @@
     "developerName": "Wonder",
     "category": "Design",
     "capabilities": ["Read", "Write"],
-    "websiteURL": "https://wonder.so",
-    "privacyPolicyURL": "https://app.termly.io/policy-viewer/policy.html?policyUUID=3517f5bb-87fb-480f-b404-2c237177e94d",
+    "websiteURL": "https://wonder.design",
+    "privacyPolicyURL": "https://wonder.design/privacy-policy",
+    "termsOfServiceURL": "https://wonder.design/terms-of-service",
     "brandColor": "#D262FF",
     "composerIcon": "./assets/logo.svg",
     "logo": "./assets/logo.svg",

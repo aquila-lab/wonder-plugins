@@ -1,6 +1,6 @@
 # Wonder agent plugins
 
-Use [Wonder](https://wonder.so) with your favorite agent harness.
+Use [Wonder](https://wonder.design) with your favorite agent harness.
 Missing one? [Request it in an issue](https://github.com/aquila-lab/wonder-plugins/issues/new).
 
 ## Cursor
