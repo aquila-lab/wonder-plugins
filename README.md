@@ -55,19 +55,25 @@ Use [Wonder](https://wonder.design) with your favorite coding agent. Pick your a
 ### Codex
 
 1. Open Codex.
-2. Install the plugin with the plugin-creator command, pointing it at this repo:
+2. In the prompt box, start typing `/plugin` and pick **Plugin Creator** from the command picker.
+
+   ![Selecting Plugin Creator in Codex](./assets/codex-plugin-creator-picker.png)
+
+3. Fill in the rest of the prompt with this repo's URL and send it:
 
    ```
    /plugin-creator Add me wonder as plugin https://github.com/aquila-lab/wonder-plugins.git
    ```
 
-3. Open the [Wonder](https://wonder.design) app and open any canvas file you want the generations drawn to. Then, back in Codex, type a prompt like:
+   ![Plugin Creator prompt ready to send](./assets/codex-plugin-creator-prompt.png)
+
+4. Open the [Wonder](https://wonder.design) app and open any canvas file you want the generations drawn to. Then, back in Codex, type a prompt like:
 
    ```
    Generate a purple button in Wonder
    ```
 
-4. On first use, Codex will say the Wonder MCP needs authentication and show a URL. Open it in your browser to authorize, then come back to Codex and re-send the same prompt. Watch it draw onto your canvas in real time.
+5. On first use, Codex will say the Wonder MCP needs authentication and show a URL. Open it in your browser to authorize, then come back to Codex and re-send the same prompt. Watch it draw onto your canvas in real time.
 
 ## How it works
 
