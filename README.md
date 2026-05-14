@@ -12,8 +12,6 @@ Use [Wonder](https://wonder.design) with your favorite coding agent. Pick your a
 
 ### Claude Code
 
-![Installing Wonder in Claude Code](./assets/claude-code-install.png)
-
 1. Open your terminal and run `claude` to start Claude Code.
 2. Add the marketplace:
 
