@@ -14,7 +14,7 @@ Wonder is an AI-native design tool built on a live canvas. With this plugin, you
 
 ## Prerequisites
 
-- A [Wonder](https://wonder.so) account.
+- A [Wonder](https://wonder.design) account.
 - A spec-compliant MCP client with OAuth support: Cursor 2.5+, Claude Code 2.1.63+, Codex, or any other MCP client that supports remote HTTP servers and the OAuth `refresh_token` grant.
 
 On first use, the plugin will trigger an OAuth sign-in flow in your IDE. After that, your agent stays signed in and tokens refresh automatically.
