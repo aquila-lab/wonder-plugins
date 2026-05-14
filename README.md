@@ -39,6 +39,8 @@ Use [Wonder](https://wonder.design) with your favorite coding agent. Pick your a
 
    Watch it draw onto your canvas in real time.
 
+![Wonder running in Claude Code](./assets/claude-code-walkthrough.png)
+
 ### Codex
 
 ```sh
