@@ -62,7 +62,7 @@ Use [Wonder](https://wonder.design) with your favorite coding agent. Pick your a
 3. Fill in the rest of the prompt with this repo's URL and send it:
 
    ```
-   /plugin-creator Add me wonder as plugin https://github.com/aquila-lab/wonder-plugins.git
+   /plugin-creator Install the Wonder plugin from https://github.com/aquila-lab/wonder-plugins
    ```
 
    ![Plugin Creator prompt ready to send](./assets/codex-plugin-creator-prompt.png)
