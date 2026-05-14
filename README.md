@@ -62,7 +62,7 @@ Pulls from the `aquila-lab/wonder-plugins` marketplace.
 
 ## How it works
 
-The plugin connects your agent to the Wonder MCP server at `https://mcp.wonder.so/mcp`. On first use you'll sign in through a standard OAuth flow — no API keys to manage, and tokens refresh automatically.
+The plugin connects your agent to the Wonder MCP server at `https://mcp.wonder.so/mcp`. On first use you'll sign in through a standard OAuth flow - no API keys to manage, and tokens refresh automatically.
 
 ## Missing your agent?
 
