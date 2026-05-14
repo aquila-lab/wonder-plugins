@@ -37,7 +37,7 @@ Use [Wonder](https://wonder.design) with your favorite coding agent. Pick your a
    Generate a purple button in Wonder
    ```
 
-   Watch it draw onto your canvas in real time.
+6. On first use, Claude will say the Wonder MCP needs authentication and print a URL. Open that link in your browser to authorize, then come back to Claude Code and re-send the same prompt. Watch it draw onto your canvas in real time.
 
 ![Wonder running in Claude Code](./assets/claude-code-walkthrough.png)
 
