@@ -1,43 +1,61 @@
 # Wonder agent plugins
 
-Use [Wonder](https://wonder.design) with your favorite agent harness.
-Missing one? [Request it in an issue](https://github.com/aquila-lab/wonder-plugins/issues/new).
+Use [Wonder](https://wonder.design) with your favorite coding agent. Pick your agent below and run the install command.
 
-## Cursor
+## Install
+
+### Cursor
 
 ```sh
 /add-plugin wonder
 ```
 
-- [View on Cursor Marketplace](https://cursor.com/marketplace/wonder)
-- [Read more about installing Cursor plugins](https://cursor.com/docs/plugins#installing-plugins)
+### Claude Code
 
-## Claude Code
+![Installing Wonder in Claude Code](./assets/claude-code-install.png)
 
-**Add the marketplace**
+1. Open your terminal and run `claude` to start Claude Code.
+2. Add the marketplace:
+
+   ```sh
+   /plugin marketplace add aquila-lab/wonder-plugins
+   ```
+
+3. Install the plugin:
+
+   ```sh
+   /plugin install wonder@wonder
+   ```
+
+4. Reload to activate it:
+
+   ```sh
+   /reload-plugins
+   ```
+
+5. Open the [Wonder](https://wonder.design) app and open any canvas file you want the generations drawn to. Then, back in Claude Code, type a prompt like:
+
+   ```
+   Generate a purple button in Wonder
+   ```
+
+   Watch it draw onto your canvas in real time.
+
+### Codex
 
 ```sh
-/plugin marketplace add aquila-lab/wonder-plugins
+/create-plugin wonder
 ```
 
-**Install the plugin**
+Pulls from the `aquila-lab/wonder-plugins` marketplace.
 
-```sh
-/plugin install wonder@wonder
-```
+## How it works
 
-## Codex
+The plugin connects your agent to the Wonder MCP server at `https://mcp.wonder.so/mcp`. On first use you'll sign in through a standard OAuth flow — no API keys to manage, and tokens refresh automatically.
 
-The plugin is published to the Codex marketplace. Install it from the Codex plugin browser, or add it manually by pointing Codex at this repo.
+## Missing your agent?
 
-## What's inside
-
-- `plugins/wonder/` — the Wonder plugin (Cursor, Claude Code, Codex manifests + remote MCP server config).
-- `.cursor-plugin/marketplace.json` — Cursor marketplace manifest.
-- `.claude-plugin/marketplace.json` — Claude Code marketplace manifest.
-- `.agents/plugins/marketplace.json` — Codex marketplace manifest.
-
-The plugin connects your agent to the Wonder MCP server hosted at `https://mcp.wonder.so/mcp`. Authentication uses standard OAuth (PKCE + refresh tokens) — no API keys to manage.
+[Open an issue](https://github.com/aquila-lab/wonder-plugins/issues/new) and we'll add it.
 
 ## License
 
