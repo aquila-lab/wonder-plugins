@@ -1,16 +1,18 @@
 name: assign-pr-author
 
-# Shim that delegates to the canonical reusable workflow in aquila-lab/.github.
-# wonder-plugins is intentionally out of the sync bot's scope (registry
-# `agents: []`), so — unlike the private consumers — this file is NOT fanned
-# automatically. Mirror any change to the canonical shim
-# (https://github.com/aquila-lab/.github/blob/master/.github/workflows/assign-pr-author.yaml)
-# here by hand.
+# Posts the required `assign-author / assign-author` status check
+# (aquila-lab/.github/rulesets/public-default.json) by delegating to a LOCAL
+# reusable workflow, `assign-pr-author-impl.yaml`.
 #
-# Status check contract: produces context `assign-author / assign-author`,
-# referenced in aquila-lab/.github/rulesets/{internal,public}-default.json.
-# Do not rename the workflow `name:` or the calling job id without updating
-# the rulesets in lock-step.
+# Why a local copy instead of calling the canonical reusable in aquila-lab/.github:
+# wonder-plugins is PUBLIC and the standards repo is PRIVATE, so a cross-repo
+# `uses: aquila-lab/.github/.github/workflows/assign-pr-author.yaml@master`
+# resolves to "workflow was not found" and the gate can never post (the prior
+# failure mode here). wonder-plugins is also intentionally out of the sync bot's
+# scope (registry `agents: []`), so this file is hand-maintained, not fanned.
+#
+# Status-check contract: the calling job id (`assign-author`) and the reusable's
+# job id (`assign-author`) must stay in lock-step with the ruleset context.
 
 on:
   pull_request_target:
@@ -22,4 +24,7 @@ permissions:
 
 jobs:
   assign-author:
-    uses: aquila-lab/.github/.github/workflows/assign-pr-author.yaml@master
+    uses: ./.github/workflows/assign-pr-author-impl.yaml
+    permissions:
+      issues: write
+      pull-requests: write
