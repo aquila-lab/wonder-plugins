@@ -1,0 +1,60 @@
+name: assign-pr-author-impl
+
+# Self-contained (vendored) copy of the canonical reusable assign-pr-author
+# workflow from aquila-lab/.github. wonder-plugins is PUBLIC and the standards
+# repo is PRIVATE, so it cannot call that repo's reusable workflow directly
+# (GitHub resolves the cross-repo `uses:` to "workflow was not found"); and the
+# repo is intentionally out of the sync bot's scope (registry `agents: []`), so
+# nothing fans the canonical version here. Mirror canonical changes by hand.
+#
+# Called by the `assign-pr-author.yaml` shim. The job id `assign-author` is
+# load-bearing: it produces the `assign-author / assign-author` status context
+# required by aquila-lab/.github/rulesets/public-default.json.
+
+on:
+  workflow_call:
+    inputs:
+      enabled:
+        description: 'Set to false to skip assignment entirely.'
+        required: false
+        type: boolean
+        default: true
+
+permissions:
+  issues: write
+  pull-requests: write
+
+jobs:
+  assign-author:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Assign the PR author as an assignee
+        if: ${{ inputs.enabled }}
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const pr = context.payload.pull_request
+            const author = pr.user.login
+
+            if (pr.user.type === 'Bot') {
+              core.info(`Skipping assignment for bot author ${author}`)
+              return
+            }
+
+            const existing = (pr.assignees ?? []).map(a => a.login)
+            if (existing.includes(author)) {
+              core.info(`PR author ${author} is already assigned`)
+              return
+            }
+
+            await github.rest.issues.addAssignees({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: pr.number,
+              assignees: [author],
+            })
+            core.info(`Assigned PR author ${author} to PR #${pr.number}`)
+
+      - name: Skip assignment
+        if: ${{ !inputs.enabled }}
+        run: echo "PR author assignment disabled by caller (inputs.enabled=false)."
