@@ -4,7 +4,7 @@
   "title": "Cursor Plugin Marketplace",
   "description": "Schema for .cursor-plugin/marketplace.json — defines a marketplace that indexes one or more Cursor plugins.",
   "type": "object",
-  "required": ["name", "plugins"],
+  "required": ["name", "owner", "plugins"],
   "additionalProperties": false,
   "properties": {
     "name": {
@@ -18,17 +18,26 @@
     },
     "metadata": {
       "type": "object",
-      "additionalProperties": true,
+      "additionalProperties": false,
       "properties": {
         "description": {
           "type": "string",
           "description": "Short description of the marketplace."
+        },
+        "version": {
+          "type": "string",
+          "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)(?:-[0-9A-Za-z-]+(?:\\.[0-9A-Za-z-]+)*)?(?:\\+[0-9A-Za-z-]+(?:\\.[0-9A-Za-z-]+)*)?$"
+        },
+        "pluginRoot": {
+          "type": "string",
+          "minLength": 1
         }
       },
-      "description": "Arbitrary metadata about the marketplace."
+      "description": "Metadata supported by Cursor for marketplace presentation and path resolution."
     },
     "plugins": {
       "type": "array",
+      "maxItems": 500,
       "items": { "$ref": "#/$defs/pluginEntry" },
       "description": "List of plugins available in the marketplace."
     }
@@ -63,15 +72,80 @@
           "description": "Plugin identifier matching the plugin's name in its plugin.json."
         },
         "source": {
-          "type": "string",
-          "minLength": 1,
+          "oneOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "object",
+              "required": ["path"],
+              "properties": {
+                "path": { "type": "string", "minLength": 1 }
+              },
+              "additionalProperties": true
+            }
+          ],
           "description": "Path to the plugin directory (relative to the marketplace root) or a remote URL."
         },
         "description": {
           "type": "string",
           "description": "Short description of the plugin."
+        },
+        "version": {
+          "type": "string"
+        },
+        "author": {
+          "$ref": "#/$defs/owner"
+        },
+        "homepage": {
+          "type": "string",
+          "format": "uri"
+        },
+        "repository": {
+          "type": "string",
+          "format": "uri"
+        },
+        "license": {
+          "type": "string"
+        },
+        "keywords": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "logo": {
+          "type": "string"
+        },
+        "category": {
+          "type": "string"
+        },
+        "tags": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "skills": { "$ref": "#/$defs/stringOrStringArray" },
+        "rules": { "$ref": "#/$defs/stringOrStringArray" },
+        "agents": { "$ref": "#/$defs/stringOrStringArray" },
+        "commands": { "$ref": "#/$defs/stringOrStringArray" },
+        "hooks": {
+          "oneOf": [{ "type": "string" }, { "type": "object" }]
+        },
+        "mcpServers": {
+          "oneOf": [{ "type": "string" }, { "type": "object" }]
+        },
+        "variables": {
+          "type": "object"
         }
       }
+    },
+    "stringOrStringArray": {
+      "oneOf": [
+        { "type": "string" },
+        {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      ]
     }
   }
 }

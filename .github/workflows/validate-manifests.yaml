@@ -25,3 +25,6 @@ jobs:
 
       - name: Validate plugin manifests
         run: npm run validate
+
+      - name: Validate Claude plugin with the official CLI
+        run: npx --yes @anthropic-ai/claude-code@2.1.251 plugin validate . --strict

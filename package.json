@@ -1,7 +1,7 @@
 {
   "name": "wonder-plugins",
-  "version": "0.1.0",
-  "description": "Wonder agent plugins for Cursor, Claude Code, and Codex.",
+  "version": "0.2.0",
+  "description": "Create and edit designs with your coding agent on a canvas where every design is real code.",
   "private": true,
   "type": "module",
   "scripts": {
