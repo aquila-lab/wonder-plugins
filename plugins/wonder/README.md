@@ -2,7 +2,11 @@
 
 ## Description
 
-Wonder is an AI-native design tool built on a live canvas. With this plugin, your agent can read your designs — artboards, element trees, computed styles, screenshots, and text — and write back to the canvas in real time. Use it to turn designs into production code, generate new UI from your codebase, keep designs and components in sync, and ship faster.
+Wonder connects your coding agent to a canvas where every design is real code. Your agent can inspect existing designs, components, variables, and documentation, create new screens and flows, and edit designs in place.
+
+Because Wonder is built on real HTML and CSS, your agent works with the actual design structure and styling instead of screenshots or handoff specs. Use it to bring your product context onto the canvas, explore and refine UI, and move approved designs back into production without rebuilding them.
+
+Wonder MCP uses OAuth, requires no API keys, and is free on every Wonder plan.
 
 ## Features
 
@@ -15,7 +19,7 @@ Wonder is an AI-native design tool built on a live canvas. With this plugin, you
 ## Prerequisites
 
 - A [Wonder](https://wonder.design) account.
-- A spec-compliant MCP client with OAuth support: Cursor 2.5+, Claude Code 2.1.63+, Codex, or any other MCP client that supports remote HTTP servers and the OAuth `refresh_token` grant.
+- Cursor, Claude Code, Codex, or another MCP client with remote HTTP and OAuth support.
 
 On first use, the plugin will trigger an OAuth sign-in flow in your IDE. After that, your agent stays signed in and tokens refresh automatically.
 
@@ -53,7 +57,7 @@ On first use, the plugin will trigger an OAuth sign-in flow in your IDE. After t
 
 ## Privacy Policy
 
-See: [Wonder Privacy Policy](https://app.termly.io/policy-viewer/policy.html?policyUUID=3517f5bb-87fb-480f-b404-2c237177e94d)
+See: [Wonder Privacy Policy](https://wonder.design/privacy-policy)
 
 ## Support
 

@@ -1,0 +1,110 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Codex Plugin Manifest",
+  "description": "Schema for .codex-plugin/plugin.json based on the current OpenAI plugin manifest contract.",
+  "type": "object",
+  "required": [
+    "name",
+    "version",
+    "description",
+    "author",
+    "interface"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "id": { "type": "string", "minLength": 1 },
+    "name": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^[a-z0-9](?:[a-z0-9.-]*[a-z0-9])?$"
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)(?:-[0-9A-Za-z-]+(?:\\.[0-9A-Za-z-]+)*)?(?:\\+[0-9A-Za-z-]+(?:\\.[0-9A-Za-z-]+)*)?$"
+    },
+    "description": { "type": "string", "minLength": 1 },
+    "author": {
+      "type": "object",
+      "required": ["name"],
+      "additionalProperties": false,
+      "properties": {
+        "name": { "type": "string", "minLength": 1 },
+        "email": { "type": "string", "format": "email" },
+        "url": { "type": "string", "format": "uri", "pattern": "^https://" }
+      }
+    },
+    "homepage": { "type": "string", "format": "uri", "pattern": "^https://" },
+    "repository": { "type": "string", "format": "uri", "pattern": "^https://" },
+    "license": { "type": "string", "minLength": 1 },
+    "keywords": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 },
+      "uniqueItems": true
+    },
+    "skills": { "type": "string", "pattern": "^\\./" },
+    "apps": { "type": "string", "pattern": "^\\./" },
+    "mcpServers": {
+      "oneOf": [
+        { "type": "string", "pattern": "^\\./" },
+        { "type": "object" }
+      ]
+    },
+    "interface": {
+      "$ref": "#/$defs/interface"
+    }
+  },
+  "$defs": {
+    "interface": {
+      "type": "object",
+      "required": [
+        "displayName",
+        "shortDescription",
+        "longDescription",
+        "developerName",
+        "category",
+        "capabilities",
+        "defaultPrompt"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "displayName": { "type": "string", "minLength": 1 },
+        "shortDescription": { "type": "string", "minLength": 1 },
+        "longDescription": { "type": "string", "minLength": 1 },
+        "developerName": { "type": "string", "minLength": 1 },
+        "category": { "type": "string", "minLength": 1 },
+        "capabilities": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 },
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "websiteURL": { "type": "string", "format": "uri", "pattern": "^https://" },
+        "privacyPolicyURL": { "type": "string", "format": "uri", "pattern": "^https://" },
+        "termsOfServiceURL": { "type": "string", "format": "uri", "pattern": "^https://" },
+        "defaultPrompt": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1, "maxLength": 128 },
+          "minItems": 1,
+          "maxItems": 3
+        },
+        "default_prompt": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1, "maxLength": 128 },
+          "minItems": 1,
+          "maxItems": 3
+        },
+        "brandColor": {
+          "type": "string",
+          "pattern": "^#[0-9A-Fa-f]{6}$"
+        },
+        "composerIcon": { "type": "string", "pattern": "^\\./assets/" },
+        "logo": { "type": "string", "pattern": "^\\./assets/" },
+        "logoDark": { "type": "string", "pattern": "^\\./assets/" },
+        "screenshots": {
+          "type": "array",
+          "items": { "type": "string", "pattern": "^\\./assets/.+\\.png$" }
+        }
+      }
+    }
+  }
+}

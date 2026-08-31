@@ -1,18 +1,19 @@
 {
+  "$schema": "https://json.schemastore.org/claude-code-marketplace.json",
   "name": "wonder",
   "owner": {
     "name": "Wonder",
     "email": "team@wonder.so"
   },
   "metadata": {
-    "description": "Wonder connects your designs, agents, code, and data on a single AI-native canvas.",
-    "version": "0.1.0"
+    "description": "Create and edit designs with Claude on a canvas where every design is real code.",
+    "version": "0.2.0"
   },
   "plugins": [
     {
       "name": "wonder",
       "source": "./plugins/wonder",
-      "description": "Connect to the Wonder MCP server and design on a canvas Claude can read and write to."
+      "description": "Create and edit designs with Claude on a canvas where every design is real code."
     }
   ]
 }

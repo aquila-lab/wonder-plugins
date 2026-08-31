@@ -23,6 +23,7 @@
     },
     "version": {
       "type": "string",
+      "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)(?:-[0-9A-Za-z-]+(?:\\.[0-9A-Za-z-]+)*)?(?:\\+[0-9A-Za-z-]+(?:\\.[0-9A-Za-z-]+)*)?$",
       "description": "Semantic version of the plugin (e.g. \"1.2.3\")."
     },
     "author": {
@@ -89,6 +90,10 @@
     "mcpServers": {
       "$ref": "#/$defs/mcpServers",
       "description": "MCP server configuration — a path, an inline config object, or an array of either."
+    },
+    "variables": {
+      "$ref": "#/$defs/variables",
+      "description": "JSON Schema declaring user-configurable variables referenced by the plugin."
     }
   },
   "$defs": {
@@ -129,6 +134,22 @@
           }
         }
       ]
+    },
+    "variables": {
+      "type": "object",
+      "required": ["type", "properties"],
+      "properties": {
+        "type": { "const": "object" },
+        "title": { "type": "string" },
+        "description": { "type": "string" },
+        "properties": { "type": "object" },
+        "required": {
+          "type": "array",
+          "items": { "type": "string" },
+          "uniqueItems": true
+        }
+      },
+      "additionalProperties": false
     }
   }
 }

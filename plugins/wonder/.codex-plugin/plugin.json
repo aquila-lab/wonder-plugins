@@ -1,7 +1,7 @@
 {
   "name": "wonder",
-  "version": "0.1.0",
-  "description": "Design on a canvas that Codex can read and write to. Generate UI from your code, sync designs and components, and ship faster.",
+  "version": "0.2.0",
+  "description": "Create and edit designs with Codex on a canvas where every design is real code.",
   "author": {
     "name": "Wonder",
     "email": "team@wonder.so",
@@ -20,20 +20,21 @@
     "design-system",
     "mcp"
   ],
-  "mcpServers": "./mcp.json",
+  "mcpServers": "./.mcp.json",
   "interface": {
     "displayName": "Wonder",
-    "shortDescription": "Design on a canvas that Codex can read and write to.",
-    "longDescription": "Wonder is an AI-native design tool built on a live canvas. With this plugin, Codex can read your designs — artboards, element trees, computed styles, screenshots, and text — and write back to the canvas in real time. Use it to turn designs into production code, generate new UI from your codebase, keep designs and components in sync, and ship faster.",
+    "shortDescription": "Create and edit designs with Codex on a canvas where every design is real code.",
+    "longDescription": "Wonder connects Codex to a canvas where every design is real code. Codex can inspect existing designs, components, variables, and documentation, create new screens and flows, and edit designs in place. It works with the actual HTML and CSS structure instead of screenshots, so you can design from your codebase and move approved designs back into production without rebuilding them.",
     "developerName": "Wonder",
-    "category": "Design",
-    "capabilities": ["Read", "Write"],
+    "category": "Creativity",
+    "capabilities": ["Interactive", "Read", "Write"],
     "websiteURL": "https://wonder.design",
     "privacyPolicyURL": "https://wonder.design/privacy-policy",
     "termsOfServiceURL": "https://wonder.design/terms-of-service",
     "brandColor": "#D262FF",
     "composerIcon": "./assets/logo.svg",
     "logo": "./assets/logo.svg",
+    "logoDark": "./assets/logo.svg",
     "defaultPrompt": [
       "Use the Tailwind tokens from my repo and design a pricing page in Wonder",
       "Implement my Wonder design in this codebase, using my code conventions",

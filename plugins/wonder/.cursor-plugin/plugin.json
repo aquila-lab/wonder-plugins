@@ -1,8 +1,8 @@
 {
   "name": "wonder",
   "displayName": "Wonder",
-  "version": "0.1.0",
-  "description": "Design on a canvas that Cursor can read and write to. Generate UI from your code, sync designs and components, and ship faster.",
+  "version": "0.2.0",
+  "description": "Create and edit designs with Cursor on a canvas where every design is real code.",
   "author": {
     "name": "Wonder",
     "email": "team@wonder.so"
@@ -19,6 +19,12 @@
     "code-to-design",
     "design-system",
     "mcp"
+  ],
+  "category": "Design",
+  "tags": [
+    "ai-design",
+    "design-to-code",
+    "code-to-design"
   ],
   "logo": "./assets/logo.svg",
   "mcpServers": "./mcp.json"

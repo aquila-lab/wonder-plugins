@@ -1,14 +1,10 @@
 #!/usr/bin/env node
-// Validates wonder-plugins manifests:
-//   1. Cursor: .cursor-plugin/marketplace.json + each plugin's .cursor-plugin/plugin.json
-//      against the official Cursor JSON schemas in ./schemas/.
-//   2. All referenced paths (logo, mcpServers, interface.screenshots, etc.) resolve
-//      to real files in the repo.
-//   3. Plugin names are unique, lowercase, kebab-case, and match between manifest
-//      and marketplace entry.
+// Validates Wonder's Claude Code, Cursor, and Codex plugin manifests against
+// their current provider contracts, then checks paths and shared metadata that
+// JSON Schema cannot validate across files.
 
 import { readFileSync, existsSync, statSync } from 'node:fs'
-import { resolve, dirname, join, relative, isAbsolute, posix } from 'node:path'
+import { resolve, dirname, isAbsolute, posix } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import process from 'node:process'
 import Ajv from 'ajv'
@@ -29,6 +25,12 @@ const isDir = (p) => exists(p) && statSync(p).isDirectory()
 
 const pluginNamePattern = /^[a-z0-9](?:[a-z0-9.-]*[a-z0-9])?$/
 const marketplaceNamePattern = /^[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$/
+const semverPattern = /^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-[0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*)?(?:\+[0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*)?$/
+const claudePluginSchema =
+  'https://json.schemastore.org/claude-code-plugin-manifest.json'
+const claudeMarketplaceSchema =
+  'https://json.schemastore.org/claude-code-marketplace.json'
+const positioning = 'every design is real code'
 
 const ajv = new Ajv({ allErrors: true, strict: false })
 addFormats(ajv)
@@ -37,6 +39,12 @@ const validateMarketplace = ajv.compile(
 )
 const validatePlugin = ajv.compile(
   loadJSON(resolve(root, 'schemas/plugin.schema.json'))
+)
+const validateCodexMarketplaceSchema = ajv.compile(
+  loadJSON(resolve(root, 'schemas/codex-marketplace.schema.json'))
+)
+const validateCodexPluginSchema = ajv.compile(
+  loadJSON(resolve(root, 'schemas/codex-plugin.schema.json'))
 )
 
 function reportAjvErrors(label, errs) {
@@ -82,6 +90,73 @@ function checkReferencedPath(pluginDir, fieldName, pathValue, pluginName) {
   }
 }
 
+function requireNonEmptyString(value, label) {
+  if (typeof value !== 'string' || value.trim().length === 0) {
+    fail(`${label} must be a non-empty string`)
+    return false
+  }
+  return true
+}
+
+function validateMcpConfig(mcpPath, label) {
+  if (!isFile(mcpPath)) {
+    fail(`${label}: missing MCP configuration`)
+    return null
+  }
+
+  const config = loadJSON(mcpPath)
+  const servers = config?.mcpServers
+  if (!servers || typeof servers !== 'object' || Array.isArray(servers)) {
+    fail(`${label}: "mcpServers" must be an object`)
+    return null
+  }
+
+  const entries = Object.entries(servers)
+  if (entries.length === 0) fail(`${label}: "mcpServers" must not be empty`)
+
+  for (const [name, server] of entries) {
+    if (!pluginNamePattern.test(name)) {
+      fail(`${label}: MCP server name "${name}" must be lowercase kebab-case`)
+    }
+    if (!server || typeof server !== 'object' || Array.isArray(server)) {
+      fail(`${label}: MCP server "${name}" must be an object`)
+      continue
+    }
+    if (server.type !== undefined && server.type !== 'http') {
+      fail(`${label}: remote MCP server "${name}" must use type "http"`)
+    }
+    if (!requireNonEmptyString(server.url, `${label}: MCP server "${name}" URL`)) {
+      continue
+    }
+    let parsed
+    try {
+      parsed = new URL(server.url)
+    } catch {
+      fail(`${label}: MCP server "${name}" has an invalid URL`)
+      continue
+    }
+    if (parsed.protocol !== 'https:') {
+      fail(`${label}: MCP server "${name}" must use HTTPS`)
+    }
+  }
+
+  return config
+}
+
+function resolveCursorSource(source, pluginRoot) {
+  const sourcePath = typeof source === 'string' ? source : source?.path
+  if (typeof sourcePath !== 'string' || !pluginRoot) return sourcePath
+  const normalizedRoot = pluginRoot.replace(/\\/g, '/').replace(/\/+$/, '')
+  const normalizedSource = sourcePath.replace(/\\/g, '/')
+  if (
+    normalizedSource === normalizedRoot ||
+    normalizedSource.startsWith(`${normalizedRoot}/`)
+  ) {
+    return normalizedSource
+  }
+  return `${normalizedRoot}/${normalizedSource}`
+}
+
 function validateCursor() {
   const marketplacePath = resolve(root, '.cursor-plugin/marketplace.json')
   if (!isFile(marketplacePath)) {
@@ -109,13 +184,17 @@ function validateCursor() {
     if (seenNames.has(entry.name)) fail(`Duplicate plugin name "${entry.name}"`)
     seenNames.add(entry.name)
 
-    if (!isSafeRelativePath(entry.source ?? '')) {
+    const sourcePath = resolveCursorSource(
+      entry.source,
+      marketplace.metadata?.pluginRoot
+    )
+    if (!isSafeRelativePath(sourcePath ?? '')) {
       fail(`${label}.source must be a safe relative path`)
       continue
     }
-    const pluginDir = resolve(root, entry.source)
+    const pluginDir = resolve(root, sourcePath)
     if (!isDir(pluginDir)) {
-      fail(`${label}.source directory does not exist: ${entry.source}`)
+      fail(`${label}.source directory does not exist: ${sourcePath}`)
       continue
     }
 
@@ -139,6 +218,10 @@ function validateCursor() {
       )
     }
 
+    if (entry.description && manifest.description !== entry.description) {
+      fail(`${entry.name}: Cursor marketplace description must match plugin.json`)
+    }
+
     for (const field of [
       'logo',
       'rules',
@@ -153,41 +236,115 @@ function validateCursor() {
       }
     }
 
-    if (!isFile(resolve(pluginDir, 'mcp.json'))) {
+    const mcpPath = resolve(pluginDir, 'mcp.json')
+    if (!isFile(mcpPath)) {
       warn(`${entry.name}: no mcp.json found (skip if you don't ship an MCP server)`)
+    } else {
+      validateMcpConfig(mcpPath, `${entry.name} Cursor mcp.json`)
     }
   }
 }
 
 function validateClaude() {
-  const path = resolve(root, '.claude-plugin/marketplace.json')
-  if (!isFile(path)) return
-  const m = loadJSON(path)
-  if (!Array.isArray(m.plugins) || m.plugins.length === 0) {
+  const marketplacePath = resolve(root, '.claude-plugin/marketplace.json')
+  if (!isFile(marketplacePath)) {
+    fail('Missing .claude-plugin/marketplace.json')
+    return
+  }
+
+  const marketplace = loadJSON(marketplacePath)
+  if (marketplace.$schema !== claudeMarketplaceSchema) {
+    fail(`Claude marketplace must use schema "${claudeMarketplaceSchema}"`)
+  }
+  if (!marketplaceNamePattern.test(marketplace.name ?? '')) {
+    fail('Claude marketplace "name" must be lowercase kebab-case')
+  }
+  requireNonEmptyString(marketplace.owner?.name, 'Claude marketplace owner.name')
+  if (!Array.isArray(marketplace.plugins) || marketplace.plugins.length === 0) {
     fail('Claude marketplace: "plugins" must be a non-empty array')
     return
   }
-  for (const [i, entry] of m.plugins.entries()) {
+
+  const seenNames = new Set()
+  for (const [i, entry] of marketplace.plugins.entries()) {
+    if (!pluginNamePattern.test(entry.name ?? '')) {
+      fail(`claude plugins[${i}].name must be lowercase kebab-case`)
+      continue
+    }
+    if (seenNames.has(entry.name)) fail(`Duplicate Claude plugin name "${entry.name}"`)
+    seenNames.add(entry.name)
+
     if (!isSafeRelativePath(entry.source)) {
       fail(`claude plugins[${i}].source must be a safe relative path`)
       continue
     }
     const pluginDir = resolve(root, entry.source)
-    if (!isFile(resolve(pluginDir, '.claude-plugin/plugin.json'))) {
+    const manifestPath = resolve(pluginDir, '.claude-plugin/plugin.json')
+    if (!isFile(manifestPath)) {
       fail(`${entry.name}: missing .claude-plugin/plugin.json`)
+      continue
+    }
+
+    const manifest = loadJSON(manifestPath)
+    if (manifest.$schema !== claudePluginSchema) {
+      fail(`${entry.name}: Claude plugin must use schema "${claudePluginSchema}"`)
+    }
+    if (manifest.name !== entry.name) {
+      fail(`${entry.name}: Claude plugin.json name must match marketplace entry`)
+    }
+    if (!semverPattern.test(manifest.version ?? '')) {
+      fail(`${entry.name}: Claude plugin version must use strict semver`)
+    }
+    requireNonEmptyString(manifest.displayName, `${entry.name}: Claude displayName`)
+    requireNonEmptyString(manifest.description, `${entry.name}: Claude description`)
+    requireNonEmptyString(manifest.author?.name, `${entry.name}: Claude author.name`)
+
+    if (entry.description && entry.description !== manifest.description) {
+      fail(`${entry.name}: Claude marketplace description must match plugin.json`)
+    }
+    if (
+      marketplace.metadata?.version &&
+      marketplace.metadata.version !== manifest.version
+    ) {
+      fail(`${entry.name}: Claude marketplace and plugin versions must match`)
+    }
+
+    for (const value of extractPathValues(manifest.mcpServers)) {
+      checkReferencedPath(pluginDir, 'mcpServers', value, entry.name)
+    }
+    if (manifest.mcpServers === './.mcp.json') {
+      validateMcpConfig(
+        resolve(pluginDir, '.mcp.json'),
+        `${entry.name} Claude .mcp.json`
+      )
     }
   }
 }
 
 function validateCodex() {
-  const path = resolve(root, '.agents/plugins/marketplace.json')
-  if (!isFile(path)) return
-  const m = loadJSON(path)
-  if (!Array.isArray(m.plugins) || m.plugins.length === 0) {
+  const marketplacePath = resolve(root, '.agents/plugins/marketplace.json')
+  if (!isFile(marketplacePath)) {
+    fail('Missing .agents/plugins/marketplace.json')
+    return
+  }
+
+  const marketplace = loadJSON(marketplacePath)
+  if (!validateCodexMarketplaceSchema(marketplace)) {
+    reportAjvErrors(
+      'codex marketplace.json',
+      validateCodexMarketplaceSchema.errors
+    )
+  }
+  if (!Array.isArray(marketplace.plugins) || marketplace.plugins.length === 0) {
     fail('Codex marketplace: "plugins" must be a non-empty array')
     return
   }
-  for (const [i, entry] of m.plugins.entries()) {
+
+  const seenNames = new Set()
+  for (const [i, entry] of marketplace.plugins.entries()) {
+    if (seenNames.has(entry.name)) fail(`Duplicate Codex plugin name "${entry.name}"`)
+    seenNames.add(entry.name)
+
     const sourcePath =
       typeof entry.source === 'string' ? entry.source : entry.source?.path
     if (!isSafeRelativePath(sourcePath)) {
@@ -201,11 +358,25 @@ function validateCodex() {
       continue
     }
     const manifest = loadJSON(manifestPath)
+    if (!validateCodexPluginSchema(manifest)) {
+      reportAjvErrors(
+        `${entry.name} Codex plugin.json`,
+        validateCodexPluginSchema.errors
+      )
+    }
+    if (manifest.name !== entry.name) {
+      fail(`${entry.name}: Codex plugin.json name must match marketplace entry`)
+    }
+    if (manifest.mcpServers !== './.mcp.json') {
+      fail(`${entry.name}: Codex mcpServers must point to "./.mcp.json"`)
+    }
+
     const refs = []
     if (manifest.mcpServers) refs.push(['mcpServers', manifest.mcpServers])
     if (manifest.interface) {
       const iface = manifest.interface
       if (iface.logo) refs.push(['interface.logo', iface.logo])
+      if (iface.logoDark) refs.push(['interface.logoDark', iface.logoDark])
       if (iface.composerIcon) refs.push(['interface.composerIcon', iface.composerIcon])
       for (const s of iface.screenshots ?? []) refs.push(['interface.screenshots', s])
     }
@@ -214,12 +385,73 @@ function validateCodex() {
         checkReferencedPath(pluginDir, field, v, entry.name)
       }
     }
+
+    validateMcpConfig(
+      resolve(pluginDir, '.mcp.json'),
+      `${entry.name} Codex .mcp.json`
+    )
+  }
+}
+
+function validateConsistency() {
+  const packageJson = loadJSON(resolve(root, 'package.json'))
+  const manifests = [
+    [
+      'Claude',
+      loadJSON(resolve(root, 'plugins/wonder/.claude-plugin/plugin.json'))
+    ],
+    [
+      'Cursor',
+      loadJSON(resolve(root, 'plugins/wonder/.cursor-plugin/plugin.json'))
+    ],
+    [
+      'Codex',
+      loadJSON(resolve(root, 'plugins/wonder/.codex-plugin/plugin.json'))
+    ]
+  ]
+
+  for (const [provider, manifest] of manifests) {
+    if (manifest.version !== packageJson.version) {
+      fail(`${provider} plugin version must match package.json version`)
+    }
+    if (!manifest.description?.toLowerCase().includes(positioning)) {
+      fail(`${provider} description must include "${positioning}"`)
+    }
+  }
+
+  if (!packageJson.description?.toLowerCase().includes(positioning)) {
+    fail(`package.json description must include "${positioning}"`)
+  }
+
+  const cursorMcp = loadJSON(resolve(root, 'plugins/wonder/mcp.json'))
+  const sharedMcp = loadJSON(resolve(root, 'plugins/wonder/.mcp.json'))
+  if (JSON.stringify(cursorMcp) !== JSON.stringify(sharedMcp)) {
+    fail('Cursor mcp.json and shared .mcp.json must stay in sync')
+  }
+
+  const claudeMarketplace = loadJSON(
+    resolve(root, '.claude-plugin/marketplace.json')
+  )
+  const cursorMarketplace = loadJSON(
+    resolve(root, '.cursor-plugin/marketplace.json')
+  )
+  for (const [provider, marketplace] of [
+    ['Claude', claudeMarketplace],
+    ['Cursor', cursorMarketplace]
+  ]) {
+    if (marketplace.metadata?.version !== packageJson.version) {
+      fail(`${provider} marketplace version must match package.json version`)
+    }
+    if (!marketplace.metadata?.description?.toLowerCase().includes(positioning)) {
+      fail(`${provider} marketplace description must include "${positioning}"`)
+    }
   }
 }
 
 validateCursor()
 validateClaude()
 validateCodex()
+validateConsistency()
 
 if (warnings.length > 0) {
   console.log('Warnings:')
