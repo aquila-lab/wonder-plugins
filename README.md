@@ -50,7 +50,7 @@ Create and edit designs with your coding agent on a canvas where every design is
 
 ### Codex
 
-1. Add the Wonder marketplace from your terminal:
+1. With the Codex CLI installed, add the Wonder marketplace from your terminal:
 
    ```sh
    codex plugin marketplace add aquila-lab/wonder-plugins
@@ -62,13 +62,17 @@ Create and edit designs with your coding agent on a canvas where every design is
    codex plugin add wonder@wonder
    ```
 
-3. Open the [Wonder](https://wonder.design) app and open any canvas file you want the generations drawn to. Then, back in Codex, type a prompt like:
+3. Restart Codex and start a new chat. Type `@wonder` and select the installed Wonder plugin. The **Wonder · Computer use** entry starts desktop automation.
+
+4. Open a canvas in [Wonder](https://wonder.design), then send this read-only connection check in Codex:
 
    ```
-   Generate a purple button in Wonder
+   Use Wonder MCP to list the artboards on my open canvas without changing it. If MCP is unavailable or authentication fails, stop and explain how to connect it. Do not use computer use.
    ```
 
-4. On first use, Codex will say the Wonder MCP needs authentication and show a URL. Open it in your browser to authorize, then come back to Codex and re-send the same prompt. Watch it draw onto your canvas in real time.
+5. Complete Wonder sign-in when Codex prompts you, then retry the connection check. Confirm Codex calls a Wonder MCP tool and returns your canvas's artboards before asking it to edit a design.
+
+The bundled `wonder-design` skill guides Codex to use Wonder MCP for canvas operations and explain connection problems. Computer use requires an explicit user request. This guidance applies when the skill loads; app picker behavior and global tool routing are controlled by Codex.
 
 ## How it works
 

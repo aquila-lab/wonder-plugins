@@ -1,0 +1,11 @@
+interface:
+  display_name: "Wonder design"
+  short_description: "Design and inspect Wonder canvases through MCP"
+
+dependencies:
+  tools:
+    - type: "mcp"
+      value: "wonder"
+      description: "Read and edit Wonder canvas designs."
+      transport: "streamable_http"
+      url: "https://mcp.wonder.so/mcp"

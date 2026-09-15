@@ -1,8 +1,4 @@
 #!/usr/bin/env node
-// Validates Wonder's Claude Code, Cursor, and Codex plugin manifests against
-// their current provider contracts, then checks paths and shared metadata that
-// JSON Schema cannot validate across files.
-
 import { readFileSync, existsSync, statSync } from 'node:fs'
 import { resolve, dirname, isAbsolute, posix } from 'node:path'
 import { fileURLToPath } from 'node:url'
@@ -373,6 +369,7 @@ function validateCodex() {
 
     const refs = []
     if (manifest.mcpServers) refs.push(['mcpServers', manifest.mcpServers])
+    if (manifest.skills) refs.push(['skills', manifest.skills])
     if (manifest.interface) {
       const iface = manifest.interface
       if (iface.logo) refs.push(['interface.logo', iface.logo])

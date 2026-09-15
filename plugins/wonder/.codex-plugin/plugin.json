@@ -21,6 +21,7 @@
     "mcp"
   ],
   "mcpServers": "./.mcp.json",
+  "skills": "./skills/",
   "interface": {
     "displayName": "Wonder",
     "shortDescription": "Create and edit designs with Codex on a canvas where every design is real code.",
