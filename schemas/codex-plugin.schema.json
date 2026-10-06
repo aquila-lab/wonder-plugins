@@ -51,9 +51,88 @@
     },
     "interface": {
       "$ref": "#/$defs/interface"
+    },
+    "extensions": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "com.openai": { "$ref": "#/$defs/openai" }
+      }
     }
   },
   "$defs": {
+    "openai": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "onboardingSkill": { "type": "string", "pattern": "^\\./skills/.+/SKILL\\.md$" },
+        "review": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "test_cases": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["positive", "negative"],
+              "properties": {
+                "positive": {
+                  "type": "array",
+                  "minItems": 5,
+                  "maxItems": 5,
+                  "items": { "$ref": "#/$defs/positiveTestCase" }
+                },
+                "negative": {
+                  "type": "array",
+                  "minItems": 3,
+                  "maxItems": 3,
+                  "items": { "$ref": "#/$defs/negativeTestCase" }
+                }
+              }
+            },
+            "demo_recording_url": { "type": "string", "format": "uri", "pattern": "^https://" },
+            "commerce": { "type": "boolean" },
+            "commerce_description": { "type": "string", "minLength": 1 }
+          }
+        },
+        "publication": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "countries": {
+              "type": "array",
+              "items": { "type": "string", "pattern": "^[A-Z]{2}$" },
+              "uniqueItems": true
+            },
+            "release_notes": { "type": "string", "minLength": 1 }
+          }
+        }
+      }
+    },
+    "positiveTestCase": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["description", "prompt", "tools_triggered", "expected_behavior"],
+      "properties": {
+        "description": { "type": "string", "minLength": 1, "maxLength": 4000 },
+        "prompt": { "type": "string", "minLength": 1 },
+        "tools_triggered": { "type": "string", "minLength": 1 },
+        "expected_behavior": { "type": "string", "minLength": 1 },
+        "file_attachment_urls": {
+          "type": "array",
+          "items": { "type": "string", "format": "uri", "pattern": "^https://" }
+        },
+        "expected_output_url": { "type": "string", "format": "uri", "pattern": "^https://" }
+      }
+    },
+    "negativeTestCase": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["description", "prompt"],
+      "properties": {
+        "description": { "type": "string", "minLength": 1 },
+        "prompt": { "type": "string", "minLength": 1 }
+      }
+    },
     "interface": {
       "type": "object",
       "required": [
@@ -67,10 +146,10 @@
       ],
       "additionalProperties": false,
       "properties": {
-        "displayName": { "type": "string", "minLength": 1 },
-        "shortDescription": { "type": "string", "minLength": 1 },
-        "longDescription": { "type": "string", "minLength": 1 },
-        "developerName": { "type": "string", "minLength": 1 },
+        "displayName": { "type": "string", "minLength": 1, "maxLength": 30 },
+        "shortDescription": { "type": "string", "minLength": 1, "maxLength": 30 },
+        "longDescription": { "type": "string", "minLength": 1, "maxLength": 4000 },
+        "developerName": { "type": "string", "minLength": 1, "maxLength": 80 },
         "category": { "type": "string", "minLength": 1 },
         "capabilities": {
           "type": "array",
@@ -79,6 +158,7 @@
           "uniqueItems": true
         },
         "websiteURL": { "type": "string", "format": "uri", "pattern": "^https://" },
+        "supportURL": { "type": "string", "format": "uri", "pattern": "^https://" },
         "privacyPolicyURL": { "type": "string", "format": "uri", "pattern": "^https://" },
         "termsOfServiceURL": { "type": "string", "format": "uri", "pattern": "^https://" },
         "defaultPrompt": {
