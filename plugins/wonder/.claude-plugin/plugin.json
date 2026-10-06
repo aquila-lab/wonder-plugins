@@ -2,7 +2,7 @@
   "$schema": "https://json.schemastore.org/claude-code-plugin-manifest.json",
   "name": "wonder",
   "displayName": "Wonder",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Create and edit designs with Claude on a canvas where every design is real code.",
   "author": {
     "name": "Wonder",
@@ -22,5 +22,10 @@
     "design-system",
     "mcp"
   ],
+  "icon": "./assets/icon.png",
+  "documentationUrl": "https://wonder.design/docs/mcp",
+  "supportUrl": "https://wonderdesign.featurebase.app/en",
+  "privacyPolicyUrl": "https://wonder.design/privacy-policy",
+  "termsOfServiceUrl": "https://wonder.design/terms-of-service",
   "mcpServers": "./.mcp.json"
 }

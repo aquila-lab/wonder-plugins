@@ -308,6 +308,25 @@ function validateClaude() {
     for (const value of extractPathValues(manifest.mcpServers)) {
       checkReferencedPath(pluginDir, 'mcpServers', value, entry.name)
     }
+
+    // Anthropic's directory reads these listing fields from plugin.json.
+    if (requireNonEmptyString(manifest.icon, `${entry.name}: Claude icon`)) {
+      checkReferencedPath(pluginDir, 'icon', manifest.icon, entry.name)
+    }
+    for (const field of [
+      'documentationUrl',
+      'supportUrl',
+      'privacyPolicyUrl',
+      'termsOfServiceUrl'
+    ]) {
+      if (!requireNonEmptyString(manifest[field], `${entry.name}: Claude ${field}`)) {
+        continue
+      }
+      if (!manifest[field].startsWith('https://')) {
+        fail(`${entry.name}: Claude ${field} must be an https:// URL`)
+      }
+    }
+
     if (manifest.mcpServers === './.mcp.json') {
       validateMcpConfig(
         resolve(pluginDir, '.mcp.json'),
