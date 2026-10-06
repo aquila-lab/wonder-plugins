@@ -5,7 +5,8 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "validate": "node ./scripts/validate.mjs"
+    "validate": "node ./scripts/validate.mjs",
+    "package:openai": "npm run validate && sh ./scripts/package-openai.sh"
   },
   "devDependencies": {
     "ajv": "^8.18.0",

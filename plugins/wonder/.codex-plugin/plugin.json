@@ -24,12 +24,13 @@
   "skills": "./skills/",
   "interface": {
     "displayName": "Wonder",
-    "shortDescription": "Create and edit designs with Codex on a canvas where every design is real code.",
-    "longDescription": "Wonder connects Codex to a canvas where every design is real code. Codex can inspect existing designs, components, variables, and documentation, create new screens and flows, and edit designs in place. It works with the actual HTML and CSS structure instead of screenshots, so you can design from your codebase and move approved designs back into production without rebuilding them.",
+    "shortDescription": "Design on a real-code canvas",
+    "longDescription": "Wonder connects ChatGPT and Codex to a canvas where every design is real code. Your agent can inspect existing designs, components, variables, and documentation, create new screens and flows, and edit designs in place. It works with the actual HTML and CSS structure instead of screenshots, so you can design from your codebase and move approved designs back into production without rebuilding them. Wonder requires a Wonder account, and canvas tools work on the file you have open in Wonder.",
     "developerName": "Wonder",
     "category": "Creativity",
     "capabilities": ["Interactive", "Read", "Write"],
     "websiteURL": "https://wonder.design",
+    "supportURL": "https://wonder.design/docs/support",
     "privacyPolicyURL": "https://wonder.design/privacy-policy",
     "termsOfServiceURL": "https://wonder.design/terms-of-service",
     "brandColor": "#D262FF",
@@ -47,5 +48,64 @@
       "./assets/browse-component-library.png",
       "./assets/visualize-production.png"
     ]
+  },
+  "extensions": {
+    "com.openai": {
+      "review": {
+        "test_cases": {
+          "positive": [
+            {
+              "description": "List the artboards on the open canvas without changing it",
+              "prompt": "Use Wonder to list the artboards on my open canvas.",
+              "tools_triggered": "get_design_context",
+              "expected_behavior": "Returns the name and size of each artboard on the open Wonder page and leaves the canvas unchanged."
+            },
+            {
+              "description": "Create a single component on the canvas",
+              "prompt": "Create a purple primary button that says Get started in Wonder.",
+              "tools_triggered": "get_design_context, get_skills, create_artboard, update_elements, take_screenshot, finish_artboard, finish_session",
+              "expected_behavior": "A new artboard sized to the button appears on the open canvas, holding a purple button labeled Get started."
+            },
+            {
+              "description": "Design a multi-section page",
+              "prompt": "Design a pricing page in Wonder with three plans: Free, Pro, and Team.",
+              "tools_triggered": "get_design_context, get_skills, create_artboard, update_elements, duplicate_elements, take_screenshot, finish_artboard, finish_session",
+              "expected_behavior": "A new desktop-size artboard appears with a header and three plan cards named Free, Pro, and Team, each with a price and a button."
+            },
+            {
+              "description": "Edit an existing design in place",
+              "prompt": "In the pricing page you just created in Wonder, change the Pro plan price to $29.",
+              "tools_triggered": "find_elements, update_elements, take_screenshot, finish_artboard, finish_session",
+              "expected_behavior": "Only the Pro plan price changes to $29. The other plans and artboards stay the same."
+            },
+            {
+              "description": "Read a design as code",
+              "prompt": "Give me the React and Tailwind code for the pricing page artboard in Wonder.",
+              "tools_triggered": "get_artboards, get_element_code",
+              "expected_behavior": "Returns JSX with Tailwind classes for the pricing page artboard and leaves the canvas unchanged."
+            }
+          ],
+          "negative": [
+            {
+              "description": "Deleting files is out of scope. Wonder exposes no tool that moves files to the trash, so the agent should say it cannot delete files and must not delete artboards instead.",
+              "prompt": "Delete all of my Wonder files."
+            },
+            {
+              "description": "Changing who can see a file is out of scope. Wonder does not let the agent change file visibility, so the agent should explain that and point the user to the share settings in Wonder.",
+              "prompt": "Make my open Wonder file public so anyone with the link can view it."
+            },
+            {
+              "description": "Other design tools are out of scope. Wonder cannot read or edit Figma files, so the agent should say so and not call any Wonder tool that changes the canvas.",
+              "prompt": "Open my Figma file and change its brand colors."
+            }
+          ]
+        },
+        "commerce": false,
+        "commerce_description": "Wonder does not sell products or process payments in ChatGPT or Codex."
+      },
+      "publication": {
+        "release_notes": "First directory release. Read, create, and edit Wonder canvas designs from ChatGPT and Codex through the Wonder MCP server."
+      }
+    }
   }
 }
