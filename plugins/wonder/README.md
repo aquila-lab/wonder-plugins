@@ -55,6 +55,10 @@ On first use, the plugin will trigger an OAuth sign-in flow in your IDE. After t
 - Updates the artboard so spacing, color, and typography match the codebase's component library.
 - Leaves unrelated artboards on the canvas untouched.
 
+## Data handling
+
+This plugin has no hooks, scripts, or local commands. Its only network connection is the Wonder MCP server at `https://mcp.wonder.so/mcp`, which you sign in to with OAuth. When your agent calls a Wonder tool, it sends that tool's inputs to Wonder, such as design instructions, text, styles, and any code context the agent includes, and receives canvas data back. Wonder handles that data under its [privacy policy](https://wonder.design/privacy-policy).
+
 ## Privacy Policy
 
 See: [Wonder Privacy Policy](https://wonder.design/privacy-policy)
@@ -62,4 +66,4 @@ See: [Wonder Privacy Policy](https://wonder.design/privacy-policy)
 ## Support
 
 - Documentation: [wonderdesign.featurebase.app/en/help/articles/5547236-get-started-with-wonder-mcp](https://wonderdesign.featurebase.app/en/help/articles/5547236-get-started-with-wonder-mcp)
-- For issues or questions: team@wonder.so
+- For issues or questions: [team@wonder.so](mailto:team@wonder.so)

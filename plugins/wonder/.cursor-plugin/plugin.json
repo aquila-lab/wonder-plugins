@@ -1,7 +1,7 @@
 {
   "name": "wonder",
   "displayName": "Wonder",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Create and edit designs with Cursor on a canvas where every design is real code.",
   "author": {
     "name": "Wonder",
@@ -26,6 +26,6 @@
     "design-to-code",
     "code-to-design"
   ],
-  "logo": "./assets/logo.svg",
+  "logo": "./assets/icon.png",
   "mcpServers": "./mcp.json"
 }

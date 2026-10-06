@@ -1,6 +1,6 @@
 {
   "name": "wonder",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Create and edit designs with Codex on a canvas where every design is real code.",
   "author": {
     "name": "Wonder",
@@ -33,9 +33,9 @@
     "privacyPolicyURL": "https://wonder.design/privacy-policy",
     "termsOfServiceURL": "https://wonder.design/terms-of-service",
     "brandColor": "#D262FF",
-    "composerIcon": "./assets/logo.svg",
-    "logo": "./assets/logo.svg",
-    "logoDark": "./assets/logo.svg",
+    "composerIcon": "./assets/icon.png",
+    "logo": "./assets/icon.png",
+    "logoDark": "./assets/icon.png",
     "defaultPrompt": [
       "Use the Tailwind tokens from my repo and design a pricing page in Wonder",
       "Implement my Wonder design in this codebase, using my code conventions",
