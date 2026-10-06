@@ -6,7 +6,7 @@
   },
   "metadata": {
     "description": "Create and edit designs with Cursor on a canvas where every design is real code.",
-    "version": "0.2.1"
+    "version": "0.2.2"
   },
   "plugins": [
     {

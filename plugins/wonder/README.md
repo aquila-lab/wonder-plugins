@@ -10,7 +10,7 @@ Wonder MCP uses OAuth, requires no API keys, and is free on every Wonder plan.
 
 ## Features
 
-- **Read designs**: Inspect artboards, element trees, computed styles, JSX output, screenshots, and text content directly from the user's active branch.
+- **Read designs**: Inspect artboards, element trees, computed styles, JSX output, screenshots, and text content in any Wonder file you can reach.
 - **Write to the canvas**: Create artboards, add or replace elements, update styles, set text, and duplicate elements — all from a prompt.
 - **Design-to-code**: Turn Wonder designs into production code by reading the canvas structure and generating components in your framework of choice.
 - **Code-to-design**: Use your codebase (tokens, styles, components) as context to generate new designs on the canvas.
@@ -20,6 +20,8 @@ Wonder MCP uses OAuth, requires no API keys, and is free on every Wonder plan.
 
 - A [Wonder](https://wonder.design) account.
 - Cursor, Claude Code, Codex, or another MCP client with remote HTTP and OAuth support.
+
+The Wonder app doesn't need to be open. Wonder's server runs the canvas tools, so your agent works on any file you can reach in the background, and the changes appear live in any editor that has the file open.
 
 On first use, the plugin will trigger an OAuth sign-in flow in your IDE. After that, your agent stays signed in and tokens refresh automatically.
 
