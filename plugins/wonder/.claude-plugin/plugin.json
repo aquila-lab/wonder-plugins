@@ -24,7 +24,6 @@
   ],
   "icon": "./assets/icon.png",
   "documentationUrl": "https://wonder.design/docs/mcp",
-  "supportUrl": "https://wonderdesign.featurebase.app/en",
   "privacyPolicyUrl": "https://wonder.design/privacy-policy",
   "termsOfServiceUrl": "https://wonder.design/terms-of-service",
   "mcpServers": "./.mcp.json"

@@ -66,4 +66,4 @@ See: [Wonder Privacy Policy](https://wonder.design/privacy-policy)
 ## Support
 
 - Documentation: [wonderdesign.featurebase.app/en/help/articles/5547236-get-started-with-wonder-mcp](https://wonderdesign.featurebase.app/en/help/articles/5547236-get-started-with-wonder-mcp)
-- For issues or questions: team@wonder.so
+- For issues or questions: [team@wonder.so](mailto:team@wonder.so)
