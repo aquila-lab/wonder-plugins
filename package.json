@@ -1,6 +1,6 @@
 {
   "name": "wonder-plugins",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "description": "Create and edit designs with your coding agent on a canvas where every design is real code.",
   "private": true,
   "type": "module",

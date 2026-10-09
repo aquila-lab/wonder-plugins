@@ -310,16 +310,8 @@ function validateClaude() {
     }
 
     // Anthropic's directory reads these listing fields from plugin.json.
-    // supportUrl stays optional: Wonder offers support by email, in the README.
     if (requireNonEmptyString(manifest.icon, `${entry.name}: Claude icon`)) {
       checkReferencedPath(pluginDir, 'icon', manifest.icon, entry.name)
-    }
-    for (const field of [
-      'documentationUrl',
-      'privacyPolicyUrl',
-      'termsOfServiceUrl'
-    ]) {
-      requireNonEmptyString(manifest[field], `${entry.name}: Claude ${field}`)
     }
     for (const field of [
       'documentationUrl',
@@ -328,7 +320,7 @@ function validateClaude() {
       'termsOfServiceUrl'
     ]) {
       if (
-        typeof manifest[field] === 'string' &&
+        requireNonEmptyString(manifest[field], `${entry.name}: Claude ${field}`) &&
         !manifest[field].startsWith('https://')
       ) {
         fail(`${entry.name}: Claude ${field} must be an https:// URL`)
