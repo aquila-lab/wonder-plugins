@@ -1,6 +1,6 @@
 {
   "name": "wonder",
-  "version": "0.2.3",
+  "version": "0.2.4",
   "description": "Create and edit designs with Codex on a canvas where every design is real code.",
   "author": {
     "name": "Wonder",
@@ -34,7 +34,7 @@
     "privacyPolicyURL": "https://wonder.design/privacy-policy",
     "termsOfServiceURL": "https://wonder.design/terms-of-service",
     "brandColor": "#D262FF",
-    "composerIcon": "./assets/icon.png",
+    "composerIcon": "./assets/composer-icon.svg",
     "logo": "./assets/icon.png",
     "logoDark": "./assets/icon.png",
     "defaultPrompt": [
