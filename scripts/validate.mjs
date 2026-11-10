@@ -394,6 +394,7 @@ function validateCodex() {
       if (iface.logo) refs.push(['interface.logo', iface.logo])
       if (iface.logoDark) refs.push(['interface.logoDark', iface.logoDark])
       if (iface.composerIcon) refs.push(['interface.composerIcon', iface.composerIcon])
+      if (iface.composerIconDark) refs.push(['interface.composerIconDark', iface.composerIconDark])
       for (const s of iface.screenshots ?? []) refs.push(['interface.screenshots', s])
     }
     for (const [field, value] of refs) {

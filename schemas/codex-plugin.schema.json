@@ -178,6 +178,7 @@
           "pattern": "^#[0-9A-Fa-f]{6}$"
         },
         "composerIcon": { "type": "string", "pattern": "^\\./assets/" },
+        "composerIconDark": { "type": "string", "pattern": "^\\./assets/" },
         "logo": { "type": "string", "pattern": "^\\./assets/" },
         "logoDark": { "type": "string", "pattern": "^\\./assets/" },
         "screenshots": {
