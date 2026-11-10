@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 import { readFileSync, existsSync, statSync } from 'node:fs'
-import { resolve, dirname, isAbsolute, posix } from 'node:path'
+import { resolve, relative, dirname, isAbsolute, posix } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import process from 'node:process'
 import Ajv from 'ajv'
@@ -73,7 +73,7 @@ function extractPathValues(value) {
   return []
 }
 
-function checkReferencedPath(pluginDir, fieldName, pathValue, pluginName) {
+function checkReferencedPath(pluginDir, fieldName, pathValue, pluginName, requiredDirectory) {
   if (pathValue.startsWith('http://') || pathValue.startsWith('https://')) return
   if (!isSafeRelativePath(pathValue)) {
     fail(
@@ -81,7 +81,15 @@ function checkReferencedPath(pluginDir, fieldName, pathValue, pluginName) {
     )
     return
   }
-  if (!exists(resolve(pluginDir, pathValue))) {
+  const referencedPath = resolve(pluginDir, pathValue)
+  if (
+    requiredDirectory &&
+    !isSafeRelativePath(relative(resolve(pluginDir, requiredDirectory), referencedPath))
+  ) {
+    fail(`${pluginName}: "${fieldName}" must stay within "./${requiredDirectory}/": "${pathValue}"`)
+    return
+  }
+  if (!exists(referencedPath)) {
     fail(`${pluginName}: "${fieldName}" references missing path "${pathValue}"`)
   }
 }
@@ -394,11 +402,18 @@ function validateCodex() {
       if (iface.logo) refs.push(['interface.logo', iface.logo])
       if (iface.logoDark) refs.push(['interface.logoDark', iface.logoDark])
       if (iface.composerIcon) refs.push(['interface.composerIcon', iface.composerIcon])
+      if (iface.composerIconDark) refs.push(['interface.composerIconDark', iface.composerIconDark])
       for (const s of iface.screenshots ?? []) refs.push(['interface.screenshots', s])
     }
     for (const [field, value] of refs) {
       for (const v of extractPathValues(value)) {
-        checkReferencedPath(pluginDir, field, v, entry.name)
+        checkReferencedPath(
+          pluginDir,
+          field,
+          v,
+          entry.name,
+          field.startsWith('interface.') ? 'assets' : undefined
+        )
       }
     }
 
