@@ -16,7 +16,8 @@ Use Wonder MCP for canvas reads, edits, and screenshots. Use computer use to int
 ## Work on the canvas
 
 - Before design work, call Wonder's `get_skills` tool to load the matching workflow from its current catalog. Follow that workflow for design procedures and tool selection.
-- Wonder does not need to be open. When the file the user means isn't open in Wonder, find it with `list_files` and `open_file`, which returns its page without opening anything on the user's screen. Don't ask the user to open Wonder first.
+- Wonder does not need to be open: canvas tools work with a `pageId`. When the file the user means isn't open in Wonder, find it with `list_files` and `open_file`, which returns its page without opening anything on the user's screen. Never make opening Wonder a condition for work the tools can do without it.
+- After you create or change a design, link it with the url the tool result gives, and suggest opening it in Wonder to see the design, edit it by hand or share it. A read-only question or a code-only change gets no link and no suggestion.
 - Inspect the target canvas through MCP before editing. Keep changes within the user's requested scope.
 - Use Wonder MCP for canvas operations, including visual checks through its screenshot tools. Continue using local repository tools for codebase reads and implementation.
 - If a required operation is unavailable through MCP, explain the limitation. Use computer use only after an explicit user request for it.
